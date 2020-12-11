@@ -4,11 +4,11 @@ export default function drawTimedTree (root: TreeNode): [VerticesInfo, EdgesInfo
   const verticesInfo: VerticesInfo = {}
   const edgesInfo: EdgesInfo = {}
   const time = { curTime: 0 }
-  drawTimedTreehelper(root, verticesInfo, edgesInfo, time)
+  drawTimedTreeHelper(root, verticesInfo, edgesInfo, time)
   return [verticesInfo, edgesInfo]
 }
 
-function drawTimedTreehelper (root: TreeNode, vertices: VerticesInfo, edges: EdgesInfo, time: {curTime: number}) {
+function drawTimedTreeHelper (root: TreeNode, vertices: VerticesInfo, edges: EdgesInfo, time: {curTime: number}) {
   vertices[root.id] = {
     id: root.id,
     coords: [root.x, root.y],
@@ -33,7 +33,7 @@ function drawTimedTreehelper (root: TreeNode, vertices: VerticesInfo, edges: Edg
     }
 
     time.curTime++
-    drawTimedTreehelper(child, vertices, edges, time)
+    drawTimedTreeHelper(child, vertices, edges, time)
 
     time.curTime++
     // show backward edge

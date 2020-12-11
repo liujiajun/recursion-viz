@@ -1,4 +1,4 @@
-import { AdjList, FunctionContent, VertexInfo } from '../../types/Types'
+import { AdjList, FunctionContent, VerticesContext } from '../../types/Types'
 
 const getUserFnDeclaration = (fnContent: FunctionContent) => {
   const paramsList = fnContent.params.map(v => v.name).join(', ')
@@ -10,13 +10,13 @@ const getUserFnDeclaration = (fnContent: FunctionContent) => {
   return fnDeclaration
 }
 
-export default function getRecursionTree (fnContent: FunctionContent) {
+export default function getRecursionTree (fnContent: FunctionContent): [AdjList, VerticesContext] {
   // eslint-disable-next-line no-eval
   const userFunction: Function = eval(getUserFnDeclaration(fnContent))
 
   const callStack: number[] = []
   const adjList: AdjList = {}
-  const vertexInfo: VertexInfo = {}
+  const verticesContext: VerticesContext = {}
   let v = 0
 
   function fnWrapper (...args: any[]) {
@@ -39,7 +39,7 @@ export default function getRecursionTree (fnContent: FunctionContent) {
     v++
 
     const res = userFunction.apply(self, args)
-    vertexInfo[curV] = { args: args, returnValue: res }
+    verticesContext[curV] = { args: args, returnValue: res }
 
     callStack.pop()
 
@@ -50,5 +50,5 @@ export default function getRecursionTree (fnContent: FunctionContent) {
   const args = fnContent.params.map(v => v.value)
   fn(...args)
 
-  return adjList
+  return [adjList, verticesContext]
 }

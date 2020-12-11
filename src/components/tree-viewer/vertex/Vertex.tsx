@@ -7,7 +7,7 @@ type Props = {
 
 const Vertex = ({ center } : Props) => {
   return (
-    <circle cx={center[0]} cy={center[1]} r="35" stroke="black" strokeWidth="2" fill="transparent"/>
+    <circle cx={center[0]} cy={center[1]} r="30" stroke="black" strokeWidth="1" fill="transparent"/>
   )
 }
 
