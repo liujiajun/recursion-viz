@@ -17,7 +17,7 @@ function test () {
       if (n == 0 || n == 1) return n;
       return fn(n - 1) + fn(n - 2);
     `,
-    params: [{ name: 'n', value: 3 }]
+    params: [{ name: 'n', value: 8 }]
   }
 
   // const adjList = {
@@ -53,7 +53,7 @@ function test () {
   console.log('---')
   console.log(root)
   console.log('---')
-  return <TreeViewer vertices={vertices} edges={edges} verticesContext={verticesContext} time={0} />
+  return <TreeViewer vertices={vertices} edges={edges} verticesContext={verticesContext} />
 }
 
 export const App = () => (
@@ -63,8 +63,10 @@ export const App = () => (
           {/* { test() } */}
           111
         </Box>
-        <Box flexGrow={1} h="100vh" mx={3} >
-          { test() }
+        <Box flexGrow={1} h="100vh" padding={3}>
+          <Box height="100%" width="100%" padding={3} borderWidth={1} borderRadius="lg">
+            { test() }
+          </Box>
         </Box>
       </Flex>
     </ChakraProvider>

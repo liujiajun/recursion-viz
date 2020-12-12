@@ -35,3 +35,5 @@ export type EdgesInfo = Record<string, {
   interval: [number, number],
   label?: string
 }>
+
+export type HighlightStatus = 'memo' | 'current' | 'normal'
