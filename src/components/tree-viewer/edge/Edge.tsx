@@ -1,7 +1,5 @@
 import * as React from 'react'
 import { HighlightStatus, Point } from '../../../types/Types'
-// import { keyframes } from '@emotion/react'
-// import styled from '@emotion/styled'
 
 type Props = {
   start: Point,
@@ -17,8 +15,10 @@ const Edge = ({ start, end, highlight, label } : Props) => {
   const animationX = React.useRef<SVGAnimateElement>(null)
   const animationY = React.useRef<SVGAnimateElement>(null)
 
+  const [opacity, setOpacity] = React.useState('0%')
+
   React.useEffect(() => {
-    if (animationX.current === null || animationY.current === null) {
+    if (!animationX.current || !animationY.current) {
       return
     }
 
@@ -26,13 +26,21 @@ const Edge = ({ start, end, highlight, label } : Props) => {
     animationX.current.beginElement()
     // @ts-ignore
     animationY.current.beginElement()
+
+    // a trick to prevent the flickering before edge animation
+    setOpacity('100%')
   }, [])
 
   return (
     <>
       <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7"
-                refX="9.5" refY="3.5" orient="auto">
+        <marker id={`ah-${edgeId}`}
+                fill={highlight === 'normal' ? 'black' : '#319795'}
+                markerWidth="10"
+                markerHeight="7"
+                refX="9.5"
+                refY="3.5"
+                orient="auto">
           <polygon points="0 0, 10 3.5, 0 7" />
         </marker>
       </defs>
@@ -43,26 +51,27 @@ const Edge = ({ start, end, highlight, label } : Props) => {
         x2={end[0]}
         y2={end[1]}
         strokeWidth={2}
-        stroke="black"
-        markerEnd="url(#arrowhead)"
+        stroke={highlight === 'normal' ? 'black' : '#319795'}
+        opacity={opacity}
+        markerEnd={`url(#ah-${edgeId})`}
       >
         <animate
           ref={animationX}
           attributeName="x2"
           from={start[0]}
           to={end[0]}
-          dur="0.3s"
+          dur="0.2s"
           repeatCount="1"
-          restart='whenNotActive'
+          restart='always'
         />
         <animate
           ref={animationY}
           attributeName="y2"
           from={start[1]}
           to={end[1]}
-          dur="0.3s"
+          dur="0.2s"
           repeatCount="1"
-          restart='whenNotActive'
+          restart='always'
         />
       </line>
     </>

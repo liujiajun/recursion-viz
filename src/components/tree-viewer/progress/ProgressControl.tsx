@@ -2,28 +2,37 @@ import * as React from 'react'
 import {
   Box,
   IconButton,
+  Icon,
   HStack,
   Slider,
   SliderTrack,
   SliderFilledTrack,
   SliderThumb
 } from '@chakra-ui/react'
-import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons'
+import { BsChevronLeft, BsChevronRight, BsPause, BsPlay } from 'react-icons/bs'
 
 type Props = {
   endTime: number,
-  time: number
-  onTimeChange: Function
+  time: number,
+  autoPlay: boolean,
+  onTimeChange: Function,
+  onAutoPlayChange: Function
 }
 
-const ProgressControl = ({ endTime, time, onTimeChange }: Props) => {
+const ProgressControl = ({ endTime, time, autoPlay, onTimeChange, onAutoPlayChange }: Props) => {
   return (
     <Box>
       <HStack spacing={4}>
+        <IconButton aria-label="Fix"
+                    onClick={() => { onAutoPlayChange(true) }}
+                    icon={<Icon as={autoPlay ? BsPause : BsPlay} />}
+                    isRound={true}
+                    colorScheme="teal"
+                    size="xs" />
         <IconButton aria-label="Back"
                     onClick={() => { onTimeChange(time - 1) }}
                     disabled={time === 0}
-                    icon={<ArrowBackIcon />}
+                    icon={<Icon as={BsChevronLeft} />}
                     isRound={true}
                     colorScheme="teal"
                     size="xs" />
@@ -42,7 +51,7 @@ const ProgressControl = ({ endTime, time, onTimeChange }: Props) => {
         <IconButton aria-label="Forward"
                     onClick={() => { onTimeChange(time + 1) }}
                     disabled={time === endTime}
-                    icon={<ArrowForwardIcon />}
+                    icon={<Icon as={BsChevronRight} />}
                     isRound={true}
                     colorScheme="teal"
                     size="xs" />

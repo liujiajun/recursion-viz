@@ -47,9 +47,6 @@ const getNodes = (nodes: VerticesInfo, context: VerticesContext, time) => {
 }
 
 const getEdges = (edges: EdgesInfo, nodes: VerticesInfo, context: VerticesContext, time) => {
-  // const p1: Point = [0, 0]
-  // const p2: Point = [30, 30]
-  // console.log(moveToCircleBorder(p1, p2))
   return (
     <>
       { Object.entries(edges).map(([k, v]) => {
@@ -60,7 +57,7 @@ const getEdges = (edges: EdgesInfo, nodes: VerticesInfo, context: VerticesContex
         return time >= v.interval[0] && time <= v.interval[1] &&
             <Edge start={processedStart}
                   end={processedEnd}
-                  highlight="normal"
+                  highlight={time === v.interval[0] ? 'current' : 'normal'}
             />
       })}
     </>
@@ -73,9 +70,26 @@ const TreeViewer = ({
   verticesContext
 } : Props) => {
   const [time, setTime] = useState(0)
+  // eslint-disable-next-line no-unused-vars
+  const [autoPlay, setAutoPlay] = useState(true)
 
   const bottomRight = getBottomRightCoords(vertices)
   const endTime = getEndTime(vertices)
+
+  React.useEffect(() => {
+    if (!autoPlay) {
+      return
+    }
+
+    if (time === endTime) {
+      setAutoPlay(false)
+    }
+    const interval = setTimeout(() => {
+      setTime(time + 1)
+    }, 500)
+
+    return () => clearTimeout(interval)
+  }, [autoPlay, time])
 
   return (
     <Box width="100%" height="100%">
@@ -86,7 +100,12 @@ const TreeViewer = ({
         </svg>
       </Box>
       <Box width="100%" height="2.5rem">
-        <ProgressControl time={time} endTime={endTime} onTimeChange={(time) => setTime(time) } />
+        <ProgressControl time={time}
+                         endTime={endTime}
+                         autoPlay={autoPlay}
+                         onTimeChange={(time) => setTime(time) }
+                         onAutoPlayChange={() => setAutoPlay((prev) => (!prev)) }
+        />
       </Box>
     </Box>
   )
