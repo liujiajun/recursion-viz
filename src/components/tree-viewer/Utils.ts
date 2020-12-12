@@ -1,5 +1,5 @@
 import { Point } from '../../types/Types'
-import {NODE_RADIUS, SCALE_FACTOR, TRANS_FACTOR} from './Constants'
+import { NODE_RADIUS, SCALE_FACTOR, TRANS_FACTOR } from './Constants'
 
 export function getScaledAndTranslatedCoords (raw: Point, k: number = 1): Point {
   return [raw[0] * SCALE_FACTOR[0] + k * TRANS_FACTOR[0],
@@ -7,8 +7,7 @@ export function getScaledAndTranslatedCoords (raw: Point, k: number = 1): Point 
 }
 
 export function moveToCircleBorder (start: Point, end: Point): [Point, Point] {
-  // x2: end[0] y2: end[1]
-  // x1: start[0] y1: start[1]
+  // FIXME: a small part of the line is inside circle
   const dis = Math.sqrt((end[1] - start[1]) ** 2 + (end[0] - start[0]) ** 2)
   const a = NODE_RADIUS * (end[0] - start[0]) / dis
   return [pointOnLine(start, end, a), pointOnLine(start, end, end[0] - start[0] - a)]

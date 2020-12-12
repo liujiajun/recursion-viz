@@ -44,7 +44,7 @@ function drawTimedTreeHelper (root: TreeNode, vertices: VerticesInfo, edges: Edg
       label: ''
     }
     // also remove the previous forward edge
-    edges[JSON.stringify([root.id, child.id])].interval[1] = time.curTime
+    edges[JSON.stringify([root.id, child.id])].interval[1] = time.curTime - 1
 
     time.curTime++
     // highlight backtrack ended
