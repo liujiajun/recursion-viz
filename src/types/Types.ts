@@ -9,7 +9,7 @@ export type FunctionContent = {
 
 export type AdjList = Record<number, number[]>
 
-export type VerticesContext = Record<number, {args: Var[], returnValue: any[]}>
+export type VerticesContext = Record<number, {args: Var[], returnValue: any[], isMemo: boolean}>
 
 export type TreeNode = {
   id: number,
@@ -18,7 +18,8 @@ export type TreeNode = {
 
   x: number,
   y: number,
-  mod: number
+  mod: number,
+
 }
 
 export type VerticesInfo = Record<number, {

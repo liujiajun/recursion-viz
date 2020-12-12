@@ -10,13 +10,15 @@ const getUserFnDeclaration = (fnContent: FunctionContent) => {
   return fnDeclaration
 }
 
-export default function getRecursionTree (fnContent: FunctionContent): [AdjList, VerticesContext] {
+export default function getRecursionTree (fnContent: FunctionContent, enableMemo: boolean): [AdjList, VerticesContext] {
   // eslint-disable-next-line no-eval
   const userFunction: Function = eval(getUserFnDeclaration(fnContent))
 
   const callStack: number[] = []
   const adjList: AdjList = {}
   const verticesContext: VerticesContext = {}
+  const memo: Record<string, any> = {}
+
   let v = 0
 
   function fnWrapper (...args: any[]) {
@@ -38,8 +40,20 @@ export default function getRecursionTree (fnContent: FunctionContent): [AdjList,
     const curV = v
     v++
 
-    const res = userFunction.apply(self, args)
-    verticesContext[curV] = { args: args, returnValue: res }
+    let res
+
+    if (enableMemo && JSON.stringify(args) in memo) {
+      res = memo[JSON.stringify(args)]
+      v++
+      verticesContext[curV] = { args: args, returnValue: res, isMemo: true }
+    } else {
+      res = userFunction.apply(self, args)
+      verticesContext[curV] = { args: args, returnValue: res, isMemo: false }
+    }
+
+    if (enableMemo) {
+      memo[JSON.stringify(args)] = res
+    }
 
     callStack.pop()
 

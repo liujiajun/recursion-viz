@@ -23,12 +23,13 @@ const ProgressControl = ({ endTime, time, autoPlay, onTimeChange, onAutoPlayChan
   return (
     <Box>
       <HStack spacing={4}>
-        <IconButton aria-label="Fix"
+        <IconButton aria-label={autoPlay ? 'Pause' : 'Play'}
                     onClick={() => { onAutoPlayChange(true) }}
                     icon={<Icon as={autoPlay ? BsPause : BsPlay} />}
                     isRound={true}
                     colorScheme="teal"
                     size="xs" />
+
         <IconButton aria-label="Back"
                     onClick={() => { onTimeChange(time - 1) }}
                     disabled={time === 0}
@@ -36,6 +37,7 @@ const ProgressControl = ({ endTime, time, autoPlay, onTimeChange, onAutoPlayChan
                     isRound={true}
                     colorScheme="teal"
                     size="xs" />
+
         <Slider colorScheme="teal"
                 onChange={(value) => { onTimeChange(value) }}
                 value={time}
@@ -48,6 +50,7 @@ const ProgressControl = ({ endTime, time, autoPlay, onTimeChange, onAutoPlayChan
           </SliderTrack>
           <SliderThumb />
         </Slider>
+
         <IconButton aria-label="Forward"
                     onClick={() => { onTimeChange(time + 1) }}
                     disabled={time === endTime}

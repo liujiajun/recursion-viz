@@ -17,7 +17,7 @@ function test () {
       if (n == 0 || n == 1) return n;
       return fn(n - 1) + fn(n - 2);
     `,
-    params: [{ name: 'n', value: 8 }]
+    params: [{ name: 'n', value: 6 }]
   }
 
   // const adjList = {
@@ -46,7 +46,7 @@ function test () {
   //   14: []
   // }
 
-  const [adjList, verticesContext] = getRecursionTree(fnContent)
+  const [adjList, verticesContext] = getRecursionTree(fnContent, true)
   const root = drawTree(adjList)
   const [vertices, edges] = drawTimedTree(root)
 

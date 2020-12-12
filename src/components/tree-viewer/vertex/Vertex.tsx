@@ -15,8 +15,8 @@ const Vertex = ({ center, highlight, label } : Props) => {
     <>
       <circle cx={center[0]}
               cy={center[1]}
-              fill={highlight === 'normal' ? 'transparent' : '#319795'}
-              stroke={highlight === 'normal' ? 'black' : '#319795'}
+              fill={highlight === 'normal' ? 'transparent' : highlight === 'memo' ? '#3182CE' : '#319795'}
+              stroke={highlight === 'normal' ? 'black' : highlight === 'memo' ? '#3182CE' : '#319795'}
               r={ NODE_RADIUS }
               strokeWidth="3"
       />

@@ -38,7 +38,11 @@ const getNodes = (nodes: VerticesInfo, context: VerticesContext, time) => {
         return v.appearFrom <= time &&
         <Vertex key={v.id}
                 center={getScaledAndTranslatedCoords(v.coords)}
-                highlight={v.highlightAt.includes(time) ? 'current' : 'normal'}
+                highlight={context[v.id].isMemo
+                  ? 'memo'
+                  : v.highlightAt.includes(time)
+                    ? 'current'
+                    : 'normal'}
                 label={context[v.id].args.join(', ')}
         />
       })}
@@ -81,10 +85,14 @@ const TreeViewer = ({
       return
     }
 
-    if (time === endTime) {
-      setAutoPlay(false)
+    if (time > endTime) {
+      setTime(0)
     }
+
     const interval = setTimeout(() => {
+      if (time === endTime - 1) {
+        setAutoPlay(false)
+      }
       setTime(time + 1)
     }, 500)
 
