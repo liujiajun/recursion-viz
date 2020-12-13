@@ -6,9 +6,10 @@ import {
   Switch,
   Flex,
   Spacer,
-  Text,
   Input,
-  Icon
+  Icon,
+  FormControl,
+  FormLabel
 } from '@chakra-ui/react'
 import { VscDebugStart } from 'react-icons/vsc'
 import Editor from 'react-simple-code-editor'
@@ -47,60 +48,64 @@ const ControlPanel = ({ onSubmit } : Props) => {
   }, [])
 
   return (
-    <Flex direction="column" height="100%" overflowY="auto">
-      <Box width="100%">
+    <FormControl height="100%">
+      <Flex height="100%" direction="column" overflowY="auto">
         <Select value={selectedTemplate}
                 onChange={e => changeTemplate(e.target.value)}
                 colorScheme="teal"
                 focusBorderColor="teal.500"
-                variant="outline">
+                variant="outline"
+        >
           { Object.entries(templates).map(([k, v]) =>
             <option key={k} value={k}> { v.name } </option>
           ) }
         </Select>
-      </Box>
-      <Box width="100%" mt={3}>
-        <Editor
-          value={code}
-          onValueChange={value => setCode(value)}
-          highlight={code => highlight(code, languages.js)}
-          padding={10}
-          style={{
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: 12,
-            backgroundColor: '#fafafa',
-            borderRadius: 4
-          }}
-        />
-      </Box>
-      <Box width="100%" mt={3} mb={3}>
-        <Flex align="center">
-          <Text mr={3}>Enable memo?</Text>
-          <Switch colorScheme="teal"
+
+        <Box mt={3}>
+          <Editor
+            value={code}
+            onValueChange={value => setCode(value)}
+            highlight={code => highlight(code, languages.js)}
+            padding={10}
+            style={{
+              fontFamily: '"Fira code", "Fira Mono", monospace',
+              fontSize: 12,
+              backgroundColor: '#fafafa',
+              borderRadius: 4
+            }}
+          />
+        </Box>
+
+        <Flex alignItems="center" mt={3}>
+          <FormLabel htmlFor="enable-memo" mb="0">Enable memo?</FormLabel>
+          <Switch id="enable-memo"
+                  colorScheme="teal"
                   size="md"
                   isChecked={enableMemo}
                   onChange={e => setEnableMemo(e.target.checked)}
           />
         </Flex>
-      </Box>
-      <Spacer />
-      <Box width="100%" mb={3}>
-        <Flex direction="row" align="center" mr="0.2rem">
-          <Input value={call}
-                 onChange={e => setCall(e.target.value)}
-                 size="sm" focusBorderColor="teal.500" mr={2} />
-          <IconButton
-            aria-label="Run"
-            onClick={() => validateAndSubmit()}
-            icon={<Icon as={VscDebugStart} />}
-            colorScheme="teal"
-            isRound
-            size="sm">
-            Run
-          </IconButton>
-        </Flex>
-      </Box>
-    </Flex>
+
+        <Spacer />
+
+        <Box mt={3}>
+          <Flex direction="row" align="center" mr="0.2rem">
+            <Input value={call}
+                   onChange={e => setCall(e.target.value)}
+                   size="md" focusBorderColor="teal.500" mr={2} />
+            <IconButton
+              aria-label="Run"
+              onClick={() => validateAndSubmit()}
+              icon={<Icon as={VscDebugStart} />}
+              colorScheme="teal"
+              isRound
+              size="md">
+              Run
+            </IconButton>
+          </Flex>
+        </Box>
+      </Flex>
+    </FormControl>
   )
 }
 

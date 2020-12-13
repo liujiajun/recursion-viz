@@ -20,8 +20,6 @@ type Props = {
 }
 
 const ProgressControl = ({ endTime, time, play, onTimeChange, onPlayChange }: Props) => {
-  console.log(time)
-  console.log(endTime)
   return (
     <Box>
       <HStack spacing={4}>
@@ -31,15 +29,18 @@ const ProgressControl = ({ endTime, time, play, onTimeChange, onPlayChange }: Pr
                     icon={<Icon as={play ? BsPause : BsPlay} />}
                     isRound
                     colorScheme="teal"
-                    size="xs" />
+                    size="md" />
 
         <IconButton aria-label="Back"
-                    onClick={() => { onTimeChange(time - 1) }}
-                    disabled={time === 0}
+                    onClick={() => {
+                      play && onPlayChange()
+                      onTimeChange(time - 1)
+                    }}
+                    disabled={endTime === 0 || time === 0}
                     icon={<Icon as={BsChevronLeft} />}
                     isRound
                     colorScheme="teal"
-                    size="xs" />
+                    size="md" />
 
         <Slider colorScheme="teal"
                 onChange={(value) => { onTimeChange(value) }}
@@ -48,7 +49,9 @@ const ProgressControl = ({ endTime, time, play, onTimeChange, onPlayChange }: Pr
                 defaultValue={0}
                 min={0}
                 max={endTime}
-                focusThumbOnChange={false} >
+                focusThumbOnChange={false}
+                varient="outline"
+        >
           <SliderTrack>
             <SliderFilledTrack />
           </SliderTrack>
@@ -56,12 +59,15 @@ const ProgressControl = ({ endTime, time, play, onTimeChange, onPlayChange }: Pr
         </Slider>
 
         <IconButton aria-label="Forward"
-                    onClick={() => { onTimeChange(time + 1) }}
-                    disabled={time === endTime}
+                    onClick={() => {
+                      play && onPlayChange()
+                      onTimeChange(time + 1)
+                    }}
+                    disabled={endTime === 0 || time === endTime}
                     icon={<Icon as={BsChevronRight} />}
                     isRound
                     colorScheme="teal"
-                    size="xs" />
+                    size="md" />
       </HStack>
     </Box>
   )
