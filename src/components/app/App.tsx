@@ -10,64 +10,54 @@ import TreeViewer from '../tree-viewer/TreeViewer'
 import drawTimedTree from '../../core/tree-drawer/TimedTreeDrawer'
 import { FunctionContent } from '../../types/Types'
 import getRecursionTree from '../../core/recursion-tracer/RecursionTracer'
+import ControlPanel from '../control-penel/ControlPanel'
 
-function test () {
-  const fnContent: FunctionContent = {
-    body: `
-      if (n == 0 || n == 1) return n;
-      return fn(n - 1) + fn(n - 2);
-    `,
-    params: [{ name: 'n', value: 6 }]
+export const App = () => {
+  const [vertices, setVertices] = React.useState({})
+  const [edges, setEdges] = React.useState({})
+  const [verticesContext, setVerticesContext] = React.useState({})
+  const [time, setTime] = React.useState(0)
+  // eslint-disable-next-line no-unused-vars
+  const [autoPlay, setAutoPlay] = React.useState(true)
+
+  const runAnimation = (fnContent: FunctionContent) => {
+    try {
+      const [adjList, newVerticesContext] = getRecursionTree(fnContent)
+      const root = drawTree(adjList)
+      const [newVertices, newEdges] = drawTimedTree(root)
+
+      setTime(0)
+      setAutoPlay(true)
+      setVertices(newVertices)
+      setEdges(newEdges)
+      setVerticesContext(newVerticesContext)
+    } catch (e) {
+      console.log(e)
+      alert(e.message)
+    }
   }
 
-  // const adjList = {
-  //   0: [1, 2],
-  //   1: [3, 4],
-  //   2: [],
-  //   3: [],
-  //   4: []
-  // }
-
-  // const adjList = {
-  //   0: [1, 2, 3],
-  //   1: [4, 5],
-  //   2: [],
-  //   3: [8, 9],
-  //   4: [],
-  //   5: [6, 7],
-  //   6: [],
-  //   7: [],
-  //   8: [],
-  //   9: [10, 11, 12, 13, 14],
-  //   10: [],
-  //   11: [],
-  //   12: [],
-  //   13: [],
-  //   14: []
-  // }
-
-  const [adjList, verticesContext] = getRecursionTree(fnContent, true)
-  const root = drawTree(adjList)
-  const [vertices, edges] = drawTimedTree(root)
-
-  console.log('---')
-  console.log(root)
-  console.log('---')
-  return <TreeViewer vertices={vertices} edges={edges} verticesContext={verticesContext} />
-}
-
-export const App = () => (
+  return (
     <ChakraProvider theme={theme}>
-      <Flex direction={{ base: 'column', md: 'row' }} >
-        <Box w={{ base: '100%', md: '20rem' }} h="100vh">
-          {/* { test() } */}
-          111
+      <Flex direction={{ base: 'column', md: 'row' }}>
+        <Box w={{ base: '100%', md: '20rem' }} h="100vh" py={3} pl={3} pr={{ base: 3, md: 0 }}>
+          <Box height="100%" width="100%" p={3} borderWidth={2} borderRadius="lg">
+            <ControlPanel onSubmit={runAnimation}/>
+          </Box>
         </Box>
         <Box flexGrow={1} h="100vh" padding={3}>
-          <Box height="100%" width="100%" padding={3} borderWidth={1} borderRadius="lg">
-            { test() }
+          <Box height="100%" width="100%" padding={3} borderWidth={2} borderRadius="lg">
+            <TreeViewer vertices={vertices}
+                        edges={edges}
+                        verticesContext={verticesContext}
+                        time={time}
+                        onTimeChange={v => setTime(v)}
+                        play={autoPlay}
+                        onPlayChange={() => setAutoPlay(p => !p)}
+            />
           </Box>
         </Box>
       </Flex>
     </ChakraProvider>
-)
+  )
+}

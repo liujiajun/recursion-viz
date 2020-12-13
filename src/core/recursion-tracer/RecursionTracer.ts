@@ -1,16 +1,18 @@
 import { AdjList, FunctionContent, VerticesContext } from '../../types/Types'
 
-const getUserFnDeclaration = (fnContent: FunctionContent) => {
-  const paramsList = fnContent.params.map(v => v.name).join(', ')
+const MAX_VERTICES = 200
 
-  const fnDeclaration = `var x; x = function (${paramsList}) {
+const getUserFnDeclaration = (fnContent: FunctionContent) => {
+  const params = fnContent.params.join(', ')
+
+  const fnDeclaration = `var x; x = function (${params}) {
     ${fnContent.body}
   }`
 
   return fnDeclaration
 }
 
-export default function getRecursionTree (fnContent: FunctionContent, enableMemo: boolean): [AdjList, VerticesContext] {
+export default function getRecursionTree (fnContent: FunctionContent): [AdjList, VerticesContext] {
   // eslint-disable-next-line no-eval
   const userFunction: Function = eval(getUserFnDeclaration(fnContent))
 
@@ -22,6 +24,10 @@ export default function getRecursionTree (fnContent: FunctionContent, enableMemo
   let v = 0
 
   function fnWrapper (...args: any[]) {
+    if (v >= MAX_VERTICES) {
+      throw new Error(`Too many vertices. Maximum number of vertices allowed: ${MAX_VERTICES}.`)
+    }
+
     if (callStack.length > 0) {
       const u = callStack[callStack.length - 1]
 
@@ -42,7 +48,7 @@ export default function getRecursionTree (fnContent: FunctionContent, enableMemo
 
     let res
 
-    if (enableMemo && JSON.stringify(args) in memo) {
+    if (fnContent.enableMemo && JSON.stringify(args) in memo) {
       res = memo[JSON.stringify(args)]
       v++
       verticesContext[curV] = { args: args, returnValue: res, isMemo: true }
@@ -51,7 +57,7 @@ export default function getRecursionTree (fnContent: FunctionContent, enableMemo
       verticesContext[curV] = { args: args, returnValue: res, isMemo: false }
     }
 
-    if (enableMemo) {
+    if (fnContent.enableMemo) {
       memo[JSON.stringify(args)] = res
     }
 
@@ -61,7 +67,7 @@ export default function getRecursionTree (fnContent: FunctionContent, enableMemo
   }
 
   const fn = fnWrapper
-  const args = fnContent.params.map(v => v.value)
+  const args = fnContent.args
   fn(...args)
 
   return [adjList, verticesContext]

@@ -2,6 +2,11 @@ import { AdjList, TreeNode } from '../../types/Types'
 import { getAllSiblings, getLeftMostChild, getMaxKey, getPreviousSibling, getRightMostChild, isLeftMost } from './Utils'
 
 export default function drawTree (adjList: AdjList): TreeNode {
+  // empty adjlist. Show nothing in the viewer.
+  if (!(0 in adjList)) {
+    adjList[0] = []
+  }
+
   const root = buildTree(adjList, 0, null)
   calculateInitialX(root)
   calculateFinalPos(root, 0)

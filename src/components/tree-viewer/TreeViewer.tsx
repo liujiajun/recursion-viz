@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Box
 } from '@chakra-ui/react'
@@ -12,6 +12,10 @@ type Props = {
   vertices: VerticesInfo,
   edges: EdgesInfo,
   verticesContext: VerticesContext,
+  time: number,
+  onTimeChange: Function,
+  play: boolean,
+  onPlayChange: Function
 }
 
 const getBottomRightCoords = (nodes: VerticesInfo) => {
@@ -71,33 +75,37 @@ const getEdges = (edges: EdgesInfo, nodes: VerticesInfo, context: VerticesContex
 const TreeViewer = ({
   vertices,
   edges,
-  verticesContext
+  verticesContext,
+  time,
+  play,
+  onTimeChange,
+  onPlayChange
 } : Props) => {
-  const [time, setTime] = useState(0)
-  // eslint-disable-next-line no-unused-vars
-  const [autoPlay, setAutoPlay] = useState(true)
-
   const bottomRight = getBottomRightCoords(vertices)
   const endTime = getEndTime(vertices)
 
   React.useEffect(() => {
-    if (!autoPlay) {
+    if (!play) {
+      return
+    }
+
+    if (time === 1 && endTime === 0) {
       return
     }
 
     if (time > endTime) {
-      setTime(0)
+      onTimeChange(0)
     }
 
     const interval = setTimeout(() => {
       if (time === endTime - 1) {
-        setAutoPlay(false)
+        onPlayChange()
       }
-      setTime(time + 1)
+      onTimeChange(time + 1)
     }, 500)
 
     return () => clearTimeout(interval)
-  }, [autoPlay, time])
+  }, [play, time])
 
   return (
     <Box width="100%" height="100%">
@@ -110,9 +118,9 @@ const TreeViewer = ({
       <Box width="100%" height="2.5rem">
         <ProgressControl time={time}
                          endTime={endTime}
-                         autoPlay={autoPlay}
-                         onTimeChange={(time) => setTime(time) }
-                         onAutoPlayChange={() => setAutoPlay((prev) => (!prev)) }
+                         play={play}
+                         onTimeChange={(time) => onTimeChange(time) }
+                         onPlayChange={() => onPlayChange() }
         />
       </Box>
     </Box>

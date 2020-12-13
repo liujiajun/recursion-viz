@@ -4,12 +4,14 @@ export type Var = {name: string, value: any}
 
 export type FunctionContent = {
   body: string,
-  params: Var[],
+  params: string[],
+  args: any[],
+  enableMemo: boolean,
 }
 
 export type AdjList = Record<number, number[]>
 
-export type VerticesContext = Record<number, {args: Var[], returnValue: any[], isMemo: boolean}>
+export type VerticesContext = Record<number, {args: any[], returnValue: any[], isMemo: boolean}>
 
 export type TreeNode = {
   id: number,
@@ -38,3 +40,8 @@ export type EdgesInfo = Record<string, {
 }>
 
 export type HighlightStatus = 'memo' | 'current' | 'normal'
+
+export type Template = {
+  name: string,
+  fnContent: FunctionContent
+}
