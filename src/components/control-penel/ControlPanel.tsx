@@ -49,7 +49,10 @@ const ControlPanel = ({ onSubmit } : Props) => {
 
   return (
     <FormControl height="100%">
-      <Flex height="100%" direction="column" overflowY="auto">
+      <Flex height="100%"
+            p={3}
+            direction="column"
+            overflowY="auto">
         <Select value={selectedTemplate}
                 onChange={e => changeTemplate(e.target.value)}
                 colorScheme="teal"
@@ -89,7 +92,7 @@ const ControlPanel = ({ onSubmit } : Props) => {
         <Spacer />
 
         <Box mt={3}>
-          <Flex direction="row" align="center" mr="0.2rem">
+          <Flex direction="row" align="center">
             <Input value={call}
                    onChange={e => setCall(e.target.value)}
                    size="md" focusBorderColor="teal.500" mr={2} />

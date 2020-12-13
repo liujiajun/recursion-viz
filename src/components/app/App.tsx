@@ -41,7 +41,7 @@ export const App = () => {
     <ChakraProvider theme={theme}>
       <Flex direction={{ base: 'column', md: 'row' }}>
         <Box w={{ base: '100%', md: '20rem' }} h="100vh" py={3} pl={3} pr={{ base: 3, md: 0 }}>
-          <Box height="100%" width="100%" p={3} borderWidth={2} borderRadius="lg">
+          <Box height="100%" width="100%" borderWidth={2} borderRadius="lg">
             <ControlPanel onSubmit={runAnimation}/>
           </Box>
         </Box>
