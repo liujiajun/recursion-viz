@@ -19,6 +19,7 @@ export const App = () => {
   const [time, setTime] = React.useState(0)
   // eslint-disable-next-line no-unused-vars
   const [autoPlay, setAutoPlay] = React.useState(true)
+  const [error, setError] = React.useState('')
 
   const runAnimation = (fnContent: FunctionContent) => {
     try {
@@ -26,14 +27,14 @@ export const App = () => {
       const root = drawTree(adjList)
       const [newVertices, newEdges] = drawTimedTree(root)
 
+      setError('')
       setTime(0)
       setAutoPlay(true)
       setVertices(newVertices)
       setEdges(newEdges)
       setVerticesContext(newVerticesContext)
     } catch (e) {
-      console.log(e)
-      alert(e.message)
+      setError(e.message)
     }
   }
 
@@ -42,7 +43,7 @@ export const App = () => {
       <Flex direction={{ base: 'column', md: 'row' }}>
         <Box w={{ base: '100%', md: '20rem' }} h="100vh" py={3} pl={3} pr={{ base: 3, md: 0 }}>
           <Box height="100%" width="100%" borderWidth={2} borderRadius="lg">
-            <ControlPanel onSubmit={runAnimation}/>
+            <ControlPanel onSubmit={runAnimation} alertMessage={error} />
           </Box>
         </Box>
         <Box flexGrow={1} h="100vh" padding={3}>

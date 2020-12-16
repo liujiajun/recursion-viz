@@ -9,7 +9,9 @@ import {
   Input,
   Icon,
   FormControl,
-  FormLabel
+  FormLabel,
+  Alert,
+  AlertDescription
 } from '@chakra-ui/react'
 import { VscDebugStart } from 'react-icons/vsc'
 import Editor from 'react-simple-code-editor'
@@ -21,10 +23,11 @@ import templates from '../../data/Templates'
 import { toCodeAndCall, toFunctionContent } from '../tree-viewer/Utils'
 
 type Props = {
-  onSubmit: Function
+  onSubmit: Function,
+  alertMessage: string
 }
 
-const ControlPanel = ({ onSubmit } : Props) => {
+const ControlPanel = ({ onSubmit, alertMessage } : Props) => {
   const [selectedTemplate, setSelectedTemplate] = React.useState('')
   const [code, setCode] = React.useState('')
   const [enableMemo, setEnableMemo] = React.useState(false)
@@ -88,6 +91,18 @@ const ControlPanel = ({ onSubmit } : Props) => {
                   onChange={e => setEnableMemo(e.target.checked)}
           />
         </Flex>
+
+        {
+          alertMessage !== '' &&
+          <Box mt={3}>
+            <Alert status="error"
+                   flexDirection="column"
+                   textAlign="left"
+            >
+              <AlertDescription>{alertMessage}</AlertDescription>
+          </Alert>
+        </Box>
+        }
 
         <Spacer />
 
